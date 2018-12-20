@@ -14,29 +14,31 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import dsa.eetac.upc.edu.exampleminim2.models.Cities;
+import dsa.eetac.upc.edu.exampleminim2.models.Element;
 import dsa.eetac.upc.edu.exampleminim2.models.User;
 
-public class ListFollowersAdapter extends RecyclerView.Adapter<ListFollowersAdapter.ViewHolder> {
+public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecyclerViewAdapter.ViewHolder> {
 
-    private List<User> dataset;
+    private List<Element> dataset;
     private Context context;
 
-    public ListFollowersAdapter(Context context) {
+    public CitiesRecyclerViewAdapter(Context context) {
         this.context = context;
         this.dataset = new ArrayList<>();
     }
 
     @Override
-    public ListFollowersAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CitiesRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_follower,parent,false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder( ListFollowersAdapter.ViewHolder holder, int position) {
-        User user = dataset.get(position);
-        holder.loginFollowerTextView.setText(user.getLogin());
-        Picasso.with(context).load(user.getAvatar_url()).into(holder.fotoFollowerImageView);
+    public void onBindViewHolder(CitiesRecyclerViewAdapter.ViewHolder holder, int position) {
+        Element element = dataset.get(position);
+        holder.loginFollowerTextView.setText(element.getMunicipiNom());
+        Picasso.with(context).load(element.getMunicipiEscut()).into(holder.fotoFollowerImageView);
     }
 
     @Override
@@ -44,8 +46,8 @@ public class ListFollowersAdapter extends RecyclerView.Adapter<ListFollowersAdap
         return dataset.size();
     }
 
-    public void addFollowers(List<User> listFollowers) {
-        dataset.addAll(listFollowers);
+    public void addFollowers(List<Element> listElements) {
+        dataset.addAll(listElements);
         notifyDataSetChanged();
     }
 

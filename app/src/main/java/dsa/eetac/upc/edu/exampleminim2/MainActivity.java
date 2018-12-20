@@ -14,7 +14,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import dsa.eetac.upc.edu.exampleminim2.githubAPI.gitApiService;
+import dsa.eetac.upc.edu.exampleminim2.DibaAPI.DibaAPI;
+import dsa.eetac.upc.edu.exampleminim2.models.Cities;
+import dsa.eetac.upc.edu.exampleminim2.models.Element;
 import dsa.eetac.upc.edu.exampleminim2.models.User;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,10 +25,10 @@ import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ListFollowersAdapter recycler;
+    private CitiesRecyclerViewAdapter recycler;
     private RecyclerView recyclerView;
 
-    private gitApiService apirest;
+    private DibaAPI apirest;
 
     TextView textViewFollowing;
     TextView textViewRepositories;
@@ -44,113 +46,37 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recycler = new ListFollowersAdapter(this);
+        recycler = new CitiesRecyclerViewAdapter(this);
         recyclerView.setAdapter(recycler);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        apirest = gitApiService.createAPIRest();
+        apirest = DibaAPI.createAPIRest();
 
 
         Intent intent = getIntent();
-        username = "victorpinon";
 
-        textViewFollowing = findViewById(R.id.textView_putFollowing);
-        textViewRepositories = findViewById(R.id.textView_putRepos);
-        imageViewProfile = (ImageView)findViewById(R.id.fotoUser);
-
-
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Loading...");
-        progressDialog.setMessage("Waiting for the server");
-        progressDialog.setCancelable(false);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.show();
-
-
-        getUserProfile();
-
-        getFollowers();
-
+        getCities();
     }
 
+    private void getCities() {
 
-    private void getUserProfile(){
-
-        Call<User> userCall = apirest.obtenerInfoUser(username);
-        userCall.enqueue(new Callback<User>() {
+        Call<Cities> callCitiesList = apirest.cities(1,11);
+        callCitiesList.enqueue(new Callback<Cities>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()){
-                    User user = response.body();
+            public void onResponse(Call<Cities> call, Response<Cities> response) {
 
-                    textViewFollowing.setText(String.valueOf(user.getFollowing()));
-                    textViewRepositories.setText(String.valueOf(user.getPublic_repos()));
-                    Picasso.with(getApplicationContext()).load(user.getAvatar_url()).into(imageViewProfile);
-
-                    progressDialog.hide();
-                }else{
-                    progressDialog.hide();
-
-                    //Show the alert dialog
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
-
-                    alertDialogBuilder
-                            .setTitle("Error")
-                            .setMessage(response.message())
-                            .setCancelable(false)
-                            .setPositiveButton("OK", (dialog, which) -> finish());
-
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
-                }
-            }
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                progressDialog.hide();
-
-                //Show the alert dialog
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
-
-                alertDialogBuilder
-                        .setTitle("Error")
-                        .setMessage(t.getMessage())
-                        .setCancelable(false)
-                        .setPositiveButton("OK", (dialog, which) -> finish());
-
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-            }
-        });
-    }
-
-    private void getFollowers(){
-
-        Call<List<User>> userCall = apirest.obtenerListaFollowers(username);
-
-        userCall.enqueue(new Callback<List<User>>() {
-            @Override
-            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 if (response.isSuccessful()) {
-                    List<User> followersList = response.body();
-
-                    if (followersList.size() != 0) {
-                        recycler.addFollowers(followersList);
-
-                    }
-                    progressDialog.hide();
-                }else{
-                progressDialog.hide();
+                    Cities cities = response.body();
+                    List<Element> listElements = cities.getElements();
+                    recycler.addFollowers(listElements);
                 }
             }
-
             @Override
-            public void onFailure(Call<List<User>> call, Throwable t) {
-                progressDialog.hide();
+            public void onFailure(Call<Cities> call, Throwable t) {
             }
+
         });
 
     }
-
-
 }
