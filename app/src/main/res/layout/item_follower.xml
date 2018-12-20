@@ -14,10 +14,18 @@
         android:layout_marginVertical="10dp"/>
 
     <TextView
-        android:id="@+id/textView_login"
+        android:id="@+id/nomTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="110dp"
+        android:layout_marginTop="-50dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/ineTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="240dp"
         android:layout_marginTop="-50dp"
         android:text="TextView" />
 

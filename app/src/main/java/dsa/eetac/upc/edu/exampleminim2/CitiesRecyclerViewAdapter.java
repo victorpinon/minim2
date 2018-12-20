@@ -14,9 +14,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import dsa.eetac.upc.edu.exampleminim2.models.Cities;
 import dsa.eetac.upc.edu.exampleminim2.models.Element;
-import dsa.eetac.upc.edu.exampleminim2.models.User;
 
 public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecyclerViewAdapter.ViewHolder> {
 
@@ -37,8 +35,9 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
     @Override
     public void onBindViewHolder(CitiesRecyclerViewAdapter.ViewHolder holder, int position) {
         Element element = dataset.get(position);
-        holder.loginFollowerTextView.setText(element.getMunicipiNom());
-        Picasso.with(context).load(element.getMunicipiEscut()).into(holder.fotoFollowerImageView);
+        holder.ine.setText(element.getIne());
+        holder.nom.setText(element.getMunicipiNom());
+        Picasso.with(context).load(element.getMunicipiEscut()).into(holder.foto);
     }
 
     @Override
@@ -55,15 +54,17 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         private LinearLayout linearLayout;
-        private ImageView fotoFollowerImageView;
-        private TextView loginFollowerTextView;
+        private ImageView foto;
+        private TextView nom;
+        private TextView ine;
 
         public ViewHolder(View itemView){
             super(itemView);
 
             linearLayout = itemView.findViewById(R.id.linearLayout);
-            fotoFollowerImageView = itemView.findViewById(R.id.fotoImageView);
-            loginFollowerTextView =  itemView.findViewById(R.id.textView_login);
+            foto = itemView.findViewById(R.id.fotoImageView);
+            nom =  itemView.findViewById(R.id.nomTextView);
+            ine =  itemView.findViewById(R.id.ineTextView);
         }
     }
 }
