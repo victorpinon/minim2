@@ -45,7 +45,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         return dataset.size();
     }
 
-    public void addFollowers(List<Element> listElements) {
+    public void addElements(List<Element> listElements) {
         dataset.addAll(listElements);
         notifyDataSetChanged();
     }
